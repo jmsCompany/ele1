@@ -1,0 +1,28 @@
+/target/
+
+# Eclipse
+.settings/
+.metadata/
+.classpath
+.project
+target/
+
+*/.settings/
+*/.metadata/
+*/.classpath
+*/.project
+
+*/target/*
+*/.settings/*
+.springBeans
+
+# IDEA #
+.idea/
+out/
+*.iml
+
+application.properties
+hibernate.properties
+
+src/main/resources/application.properties
+src/main/resources/hibernate.properties
