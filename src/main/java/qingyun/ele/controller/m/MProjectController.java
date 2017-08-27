@@ -71,6 +71,19 @@ public class MProjectController {
 	}
 	
 	
+	
+	@Transactional(readOnly = true)
+	@RequestMapping(value = "/m/getloc", method = RequestMethod.GET)
+	public WSLoc getloc(@RequestParam("id") Long id) {
+		
+		WSLoc loc = new WSLoc();
+		loc.setLang("31.1502551756");
+		loc.setLat("121.4310178657");
+		return loc;
+	}
+	
+	
+	
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/m/proj", method = RequestMethod.GET)
 	public WSProjectDetail proj(@RequestParam("id") Long id) {
