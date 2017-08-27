@@ -21,8 +21,8 @@ target/
 out/
 *.iml
 
-application.properties
-hibernate.properties
+#application.properties
+#hibernate.properties
 
-src/main/resources/application.properties
-src/main/resources/hibernate.properties
+#src/main/resources/application.properties
+#src/main/resources/hibernate.properties
