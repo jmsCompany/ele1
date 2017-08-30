@@ -39,6 +39,9 @@ public class Users implements java.io.Serializable {
 	private String name;
 	private Long enabled;
 	private Date lastLogin;
+	private Long fd;
+	private Long ts;
+	private Long ycts;
 	private Set<Logs> logses = new HashSet<Logs>(0);
 	private Set<ProjectSteps> projectStepses = new HashSet<ProjectSteps>(0);
 
@@ -208,6 +211,30 @@ public class Users implements java.io.Serializable {
 
 	public void setProjectStepses(Set<ProjectSteps> projectStepses) {
 		this.projectStepses = projectStepses;
+	}
+	@Column(name = "fd")
+	public Long getFd() {
+		return fd;
+	}
+
+	public void setFd(Long fd) {
+		this.fd = fd;
+	}
+	@Column(name = "ts")
+	public Long getTs() {
+		return ts;
+	}
+
+	public void setTs(Long ts) {
+		this.ts = ts;
+	}
+	@Column(name = "ycts")
+	public Long getYcts() {
+		return ycts;
+	}
+
+	public void setYcts(Long ycts) {
+		this.ycts = ycts;
 	}
 
 }

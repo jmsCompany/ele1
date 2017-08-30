@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import qingyun.ele.SecurityUtils;
 import qingyun.ele.domain.db.Users;
 import qingyun.ele.repository.UsersRepository;
 import qingyun.ele.service.UsrService;
 import qingyun.ele.ws.Valid;
+import qingyun.ele.ws.WSMset;
 import qingyun.ele.ws.WSUser;
 import qingyun.ele.ws.WSUserPassword;
 import qingyun.ele.ws.WSUserProfile;
@@ -24,6 +27,8 @@ public class MUserController {
 	private UsrService usrService;
 	@Autowired
 	private UsersRepository usersRepository;
+	@Autowired
+	private SecurityUtils securityUtils;
 
 	@Transactional(readOnly = false)
 	@RequestMapping(value = "/m/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -67,5 +72,35 @@ public class MUserController {
 		}
 	}
 
+	
+	@Transactional(readOnly = true)
+	@RequestMapping(value = "/m/getsetting", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public WSMset getsetting() {
+		Users usr = securityUtils.getCurrentDBUser();
+		Long fd = usr.getFd()==null?0l:usr.getFd();
+		Long ts = usr.getTs()==null?0l: usr.getTs();
+		Long ycts = usr.getYcts()==null?0l:usr.getYcts();
+		WSMset set = new WSMset();
+		set.setFd(fd);
+		set.setTs(ts);
+		set.setYcts(ycts);
+		return set;
+	}
+	
+	
+	@Transactional(readOnly = false)
+	@RequestMapping(value = "/m/savesetting", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Valid saveSetting(@RequestBody WSMset set) {
+		Users usr = securityUtils.getCurrentDBUser();
+		usr.setFd(set.getFd());
+		usr.setTs(set.getTs());
+		usr.setYcts(set.getYcts());
+		usersRepository.save(usr);
+	    Valid v =new Valid();
+	    v.setValid(true);
+	    v.setMsg("保存成功！");
+	    return v;
+	}
+	
 	
 }

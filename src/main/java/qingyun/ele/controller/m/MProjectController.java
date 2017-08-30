@@ -45,33 +45,6 @@ public class MProjectController {
 	
 	
 	
-	
-	
-	
-	
-	@Transactional(readOnly = true)
-	@RequestMapping(value = "/m/getsetting", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public WSMset getsetting() {
-		
-		WSMset set = new WSMset();
-		set.setFd(1l);
-		set.setTs(1l);
-		set.setYcts(0l);
-		return set;
-	}
-	
-	
-	@Transactional(readOnly = true)
-	@RequestMapping(value = "/m/savesetting", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Valid saveSetting(@RequestBody WSMset set) {
-	    Valid v =new Valid();
-	    v.setValid(true);
-	    v.setMsg("保存成功！");
-	    return v;
-	}
-	
-	
-	
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/m/getloc", method = RequestMethod.GET)
 	public WSLoc getloc(@RequestParam("id") Long id) {
@@ -138,5 +111,13 @@ public class MProjectController {
 		
 	}
 	
-	
+	@Transactional(readOnly = true)
+	@RequestMapping(value = "/m/mapchars", method = RequestMethod.POST)
+	public WSRes mapchars(@RequestBody WSReq wsReq) {
+		WSRes res = new WSRes();
+		res.setxAxis("6,4,8,20");
+		res.setyAxis("120,140");
+		res.setToday("123KWH");
+		return res;
+	}
 }
