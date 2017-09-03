@@ -11,6 +11,6 @@ import qingyun.ele.domain.db.CustomerDevice;
  */
 public interface CustomerDeviceRepository extends JpaRepository<CustomerDevice,Long> {
 
-    @Query("select c from CustomerDevice c where c.idCustomer=?1")
+    @Query("select c from CustomerDevice c where c.idCustomer=?1 and c.status=1")
     public Page<CustomerDevice> findByProjectId(Long projectId, Pageable pageable);
 }

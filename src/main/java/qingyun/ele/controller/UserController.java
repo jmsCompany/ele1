@@ -422,7 +422,7 @@ public class UserController {
 		//计算当前页码
 		int page_num = (start.intValue() / length.intValue()) + 1;
 		Pageable pageable = new PageRequest(page_num - 1, length);
-		System.out.println("user id: " +sessionUser.getId());
+		//System.out.println("user id: " +sessionUser.getId());
 		Page<Customer> 
 			customers = customerRepository.findAllCustomersByRoleIdAndStatus(sessionUser.getId(),8l, pageable);
 		

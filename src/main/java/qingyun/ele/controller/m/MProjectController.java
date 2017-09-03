@@ -1,19 +1,37 @@
 package qingyun.ele.controller.m;
 
 import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import qingyun.ele.SecurityUtils;
+import qingyun.ele.domain.db.Customer;
+import qingyun.ele.domain.db.Users;
+import qingyun.ele.repository.CustomerRepository;
+import qingyun.ele.repository.UsersRepository;
 import qingyun.ele.ws.*;
+
 
 @RestController
 @Transactional(readOnly = true)
 public class MProjectController {
+	@Autowired
+	private UsersRepository usersRepository;
+	@Autowired
+	private SecurityUtils securityUtils;
+	@Autowired
+	private CustomerRepository customerRepository;
 	
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/m/projList", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<WSProject> projList() {
+		 Users usr = securityUtils.getCurrentDBUser();
+		 List<Customer> projs = customerRepository.finByMobile(usr.getMobile());
 		 List<WSProject> ls = new ArrayList<WSProject>();
+		 
 		 WSProject w = new WSProject();
 		 w.setAddress("福建省三明市尤溪县汤川镇光明村");
 		 w.setDrfd(9.8f);
@@ -115,8 +133,30 @@ public class MProjectController {
 	@RequestMapping(value = "/m/mapchars", method = RequestMethod.POST)
 	public WSRes mapchars(@RequestBody WSReq wsReq) {
 		WSRes res = new WSRes();
-		res.setxAxis("6,4,8,20");
-		res.setyAxis("120,140");
+		System.out.println("type: " +wsReq.getType() );
+		if(wsReq.getType().equals("day"))
+		{
+			res.setxAxis("1,2,3,4,5,6,7,8");
+			res.setyAxis("120,140,168,172,123,112,94,22");
+		}
+		else if(wsReq.getType().equals("month"))
+		{
+			res.setxAxis("0,1,2,3,4,5,6,7,8,9,10,11,12");
+			res.setyAxis("120,140,168,172,123,112,94,22,122,122,121,96");
+		}
+		else if(wsReq.getType().equals("year"))
+		{
+			
+		}
+		else if(wsReq.getType().equals("all"))
+		{
+			
+		}
+		else
+		{
+			
+		}
+	
 		res.setToday("123KWH");
 		return res;
 	}

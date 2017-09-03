@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import qingyun.ele.SecurityUtils;
@@ -14,6 +15,7 @@ import qingyun.ele.domain.db.Users;
 import qingyun.ele.repository.UsersRepository;
 import qingyun.ele.service.UsrService;
 import qingyun.ele.ws.Valid;
+import qingyun.ele.ws.WSDevice;
 import qingyun.ele.ws.WSMset;
 import qingyun.ele.ws.WSUser;
 import qingyun.ele.ws.WSUserPassword;
@@ -45,12 +47,27 @@ public class MUserController {
 		wsUserProfile.setValid(true);
 		wsUserProfile.setToken(token);
 		wsUserProfile.setUsername(u.getUsername());
-
 		wsUserProfile.setIdUser(u.getId());
 		wsUserProfile.setName(u.getName());
 		return wsUserProfile;
 	}
 
+//	.antMatchers("/m/checkmac").permitAll()
+//	.antMatchers("/m/publish").permitAll()
+//	.antMatchers("/m/error").permitAll()
+	
+	@Transactional(readOnly = false)
+	@RequestMapping(value = "/m/checkmac", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public WSDevice checkMac(@RequestBody WSDevice device) {
+	
+		System.out.println("mac is: " + device.getMAC());
+		device.setRET(1);
+		device.setID_DEVICE(1001);
+		return device;
+	}
+
+	
+	
 	
 	@Transactional(readOnly = false)
 	@RequestMapping(value = "/m/updateUser", method = RequestMethod.POST)

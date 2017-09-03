@@ -33,6 +33,8 @@ public class CustomerDevice  implements java.io.Serializable {
      private Long status;   //1在线 0 离线
      private Date lastUpdated;
      private Long createdBy;
+     
+     private Float vol; //初容量
 
     public CustomerDevice() {
     }
@@ -146,6 +148,16 @@ public class CustomerDevice  implements java.io.Serializable {
     public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
+
+    @Column(name="vol", precision=12, scale=0)
+	public Float getVol() {
+		return vol;
+	}
+
+
+	public void setVol(Float vol) {
+		this.vol = vol;
+	}
 
 
 

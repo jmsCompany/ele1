@@ -52,5 +52,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	public Page<Customer> findByStepIdAndLocationId(Long stepId, Long locationId, Pageable page);
 
 	@Query("select c from Customer c where c.mobile=?1")
-	public Customer finByMobile(String mobile);
+	public List<Customer> finByMobile(String mobile);
 }
