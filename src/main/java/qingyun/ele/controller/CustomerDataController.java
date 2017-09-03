@@ -1,7 +1,17 @@
 package qingyun.ele.controller;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +32,13 @@ import qingyun.ele.ws.WSArea;
 import qingyun.ele.ws.WSChart;
 import qingyun.ele.ws.WSDCInput;
 import qingyun.ele.ws.WSDCOutput;
+import qingyun.ele.ws.WSDaliyReport;
 import qingyun.ele.ws.WSDevice;
+import qingyun.ele.ws.WSInvertEne;
 import qingyun.ele.ws.WSReq;
 import qingyun.ele.ws.WSSSInv;
 import qingyun.ele.ws.WSSationInfo;
+import qingyun.ele.ws.WSSelectObj;
 import qingyun.ele.ws.WSTableData;
 
 @RestController
@@ -61,10 +74,34 @@ public class CustomerDataController {
 	
 	@Transactional(readOnly = false)
 	@RequestMapping(value = "/info/getdlchart", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public WSArea getglchart(@RequestBody WSReq wsReq)
+	public WSChart getglchart(@RequestBody WSReq wsReq)
 	{
-		WSArea a  = new WSArea();
+
+		WSChart a  = new WSChart();
+		System.out.println("type: " + wsReq.getType());
+		if(wsReq.getType().equals("day"))
+		{
+			String[] x  = {"2016-09", "2016-10", "2016-11", "2016-12", "2017-01","2017-02","2017-03"
+					,"2017-04","2017-05","2017-06","2017-07","2017-08"};
+			Float[] y = {29.9f, 71.5f, 106.4f, 129.2f, 144.0f, 176.0f, 135.6f, 148.5f, 216.4f, 194.1f,
+					95.6f, 54.4f};
+			a.setX(x);
+			a.setY(y);
+		}
+
+		else
+		{
+			String[] x  = { "2017-01","2017-02","2017-03"
+					,"2017-04","2017-05","2017-06","2017-07","2017-08"};
+			Float[] y = { 144.0f, 176.0f, 135.6f, 148.5f, 216.4f, 194.1f,
+					95.6f, 54.4f};
+			a.setX(x);
+			a.setY(y);
+		}
+	
+
 		return a;
+	
 	}
 	@Transactional(readOnly = false)
 	@RequestMapping(value = "/info/getglchart", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -360,4 +397,158 @@ public class CustomerDataController {
 		return t;
 	}
 
+	
+	
+	@RequestMapping(value = "/info/invertdatatable", method = RequestMethod.POST)
+	public WSTableData invertdatatable(
+			@RequestParam(required =false) Long id,
+			@RequestParam Integer start, @RequestParam Integer draw,
+			@RequestParam Integer length) {
+		int page_num = (start.intValue() / length.intValue()) + 1;
+		Pageable pageable = new PageRequest(page_num - 1, length);
+		//逆变器SN	Vpv1	Vpv2	Vpv3	Ipv1	
+		//Ipv2	Ipv3	Vac1	Vac2	Vac3	
+		//Iac1	Iac2	Iac3	Pac1	Pac2	Pac3	
+		//Fac	温度(℃)	时间(GMT +8)	当日电量(kWh)	总电量(kWh)
+		//Page<CustomerData> customerData = customerDataRepository.findByIdDesc(pageable);
+		List<String[]> lst = new ArrayList<String[]>();
+		for (int i=1; i<5; i++) {
+			
+			
+			String[] d = {
+					"sn00000000" +i,
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.5",
+					"12.45C",
+					"2017-08-31",
+					"12",
+					"300"
+					
+					
+					
+			};
+			lst.add(d);
+		}
+
+		WSTableData t = new WSTableData();
+		t.setDraw(draw);
+		t.setRecordsTotal((int) 4);
+		t.setRecordsFiltered((int) 4);
+		t.setData(lst);
+		return t;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	@Transactional(readOnly = false)
+	@RequestMapping(value = "/info/getdailyreport", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public WSDaliyReport getdailyreport(@RequestBody WSReq wsReq)
+	{
+		WSDaliyReport a  = new WSDaliyReport();
+		a.setSite("吉和祥8kw屋面分布式光伏电站");
+		a.setDrdl(10.66f);
+		a.setTime(wsReq.getTime());
+		a.setZdl(6291.2f);
+		a.setZjrl(8f);
+		List<WSInvertEne> nbq  = new ArrayList<WSInvertEne>();
+		WSInvertEne i = new WSInvertEne();
+		i.setSn("001413821388-001");
+		i.setDl(6.72f);
+		nbq.add(i);
+		WSInvertEne i1 = new WSInvertEne();
+		i1.setSn("001413821388-002");
+		i1.setDl(2.2f);
+		nbq.add(i1);
+		a.setNbq(nbq);
+		return a;
+	}
+	
+	
+	@RequestMapping(value = "/info/deviceselects", method = RequestMethod.GET)
+	public List<WSSelectObj> deviceselects(@RequestParam Long proId) {
+
+		
+		List<WSSelectObj> ws = new ArrayList<WSSelectObj>();
+		WSSelectObj w1 = new WSSelectObj("10001", "sn00000001");
+		ws.add(w1);
+		WSSelectObj w2 = new WSSelectObj("10002", "sn00000002");
+		ws.add(w2);
+		
+		return ws;
+	}
+	
+	
+	  //文件下载相关代码
+		@RequestMapping(value = "/info/daliyexport", method = RequestMethod.POST)
+		  public String daliyexport( 
+				   HttpServletResponse response,
+				   @RequestBody WSReq wsReq
+				 
+	      ) throws UnsupportedEncodingException{
+
+			String str = "c1,c2"; 
+			InputStream in_withcode   =   new  ByteArrayInputStream(str.getBytes("UTF-8"));
+			String test="test.csv";
+		        response.setContentType("application/force-download");// 设置强制下载不打开
+		        response.setHeader("Content-Disposition",
+		            "attachment;fileName=" + test);// 设置文件名
+		        byte[] buffer = new byte[1024];
+		        FileInputStream fis = null;
+		        BufferedInputStream bis = null;
+		        try {
+		         
+		          bis = new BufferedInputStream(in_withcode);
+		          OutputStream os = response.getOutputStream();
+		          int i = bis.read(buffer);
+		          while (i != -1) {
+		            os.write(buffer, 0, i);
+		            i = bis.read(buffer);
+		          }
+		          System.out.println("success");
+		        } catch (Exception e) {
+		          e.printStackTrace();
+		        } finally {
+		          if (bis != null) {
+		            try {
+		              bis.close();
+		            } catch (IOException e) {
+		              e.printStackTrace();
+		            }
+		          }
+		          if (fis != null) {
+		            try {
+		              fis.close();
+		            } catch (IOException e) {
+		              e.printStackTrace();
+		            }
+		          }
+		        }
+		   
+		    return null;
+		  }
+		
+	
+	
+	
+
+	
 }

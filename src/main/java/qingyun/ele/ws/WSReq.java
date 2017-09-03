@@ -9,6 +9,7 @@ public class WSReq implements Serializable {
 	private String type;
 	//1直流输入电压，2直流输入电流，3交流输出电压，4交流输出电流，5，交流输出功率，6交流输出频率，7温度，8累计能量
 	private Integer stype;
+	
 	public String getTime() {
 		return time;
 	}
