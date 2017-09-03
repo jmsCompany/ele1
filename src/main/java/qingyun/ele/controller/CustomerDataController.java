@@ -321,6 +321,7 @@ public class CustomerDataController {
 		info.setLang("31.1502551756");
 		info.setLat("121.4310178657");
 		
+		info.setCity("苏州");
 		info.setPic("$2a$10$yRNu8bxzH6MpId7HvEQOzQseG3wiXuq6e25DVsU1wBYiQ9iWJZi_1499584643298.jpg");
 		info.setZcsj("2017-08-12");
 		info.setZhgxsj("2017-09-02");

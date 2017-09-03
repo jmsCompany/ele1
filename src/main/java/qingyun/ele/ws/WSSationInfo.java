@@ -18,6 +18,7 @@ public class WSSationInfo{
 	private Float fdxl; //发电效率：
     private String zcsj; //注册时间：
 	private String zhgxsj; //最后更新时间：
+	  private String city; //项目所在城市
 	
 	public Integer getBjs() {
 		return bjs;
@@ -108,6 +109,12 @@ public class WSSationInfo{
 	}
 	public void setZhgxsj(String zhgxsj) {
 		this.zhgxsj = zhgxsj;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
 	}
 	
 	
