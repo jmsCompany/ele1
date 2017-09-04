@@ -30,11 +30,16 @@ public class CustomerDevice  implements java.io.Serializable {
      private String inverterAlias; //逆变器别名
      private String dataloggerAlias; //采集器别名
      private String inverterType;   
-     private Long status;   //1在线 0 离线
+     private Long status;   //故障，正常
      private Date lastUpdated;
      private Long createdBy;
      
      private Float vol; //初容量
+     private Long idx; //序号
+     private Long deleted; //是否删除
+     private Long online; //在线
+     
+    
 
     public CustomerDevice() {
     }
@@ -157,6 +162,36 @@ public class CustomerDevice  implements java.io.Serializable {
 
 	public void setVol(Float vol) {
 		this.vol = vol;
+	}
+
+
+	public Long getIdx() {
+		return idx;
+	}
+
+
+	public void setIdx(Long idx) {
+		this.idx = idx;
+	}
+
+
+	public Long getDeleted() {
+		return deleted;
+	}
+
+
+	public void setDeleted(Long deleted) {
+		this.deleted = deleted;
+	}
+
+
+	public Long getOnline() {
+		return online;
+	}
+
+
+	public void setOnline(Long online) {
+		this.online = online;
 	}
 
 

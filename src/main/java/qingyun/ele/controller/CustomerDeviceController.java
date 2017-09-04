@@ -49,20 +49,32 @@ public class CustomerDeviceController {
         //System.out.println("save device: " + new Date());
         if (customerDevice.getId()==null||customerDevice.getId().equals(0l)){
             dbCustomerDevice=new CustomerDevice();
-            dbCustomerDevice.setStatus(1l);  //默认为有效1表示有效,0表示无效
+            dbCustomerDevice.setDeleted(0l);
+            dbCustomerDevice.setStatus(1l); //正常
+            dbCustomerDevice.setIdx(customerDevice.getIdx());
+            dbCustomerDevice.setOnline(customerDevice.getOnline());
+            dbCustomerDevice.setCreatedBy(securityUtils.getCurrentDBUser().getId());
+            dbCustomerDevice.setDataloggerAlias(customerDevice.getDataloggerAlias());
+            dbCustomerDevice.setInverterAlias(customerDevice.getInverterAlias());
+            dbCustomerDevice.setDataloggerSn(customerDevice.getDataloggerSn());
+            dbCustomerDevice.setIdCustomer(customerDevice.getIdCustomer());
+            dbCustomerDevice.setInverterSn(customerDevice.getInverterSn());
+            dbCustomerDevice.setInverterType(customerDevice.getInverterType());
+            dbCustomerDevice.setLastUpdated(new Date());
+            dbCustomerDevice.setVol(customerDevice.getVol()); 
         }else{
             dbCustomerDevice=customerDeviceRepository.findOne(customerDevice.getId());
+            dbCustomerDevice.setIdx(customerDevice.getIdx());
+            dbCustomerDevice.setOnline(customerDevice.getOnline());
+            dbCustomerDevice.setDataloggerAlias(customerDevice.getDataloggerAlias());
+            dbCustomerDevice.setInverterAlias(customerDevice.getInverterAlias());
+            dbCustomerDevice.setDataloggerSn(customerDevice.getDataloggerSn());
+            dbCustomerDevice.setInverterSn(customerDevice.getInverterSn());
+            dbCustomerDevice.setInverterType(customerDevice.getInverterType());
+            dbCustomerDevice.setLastUpdated(new Date());
+            dbCustomerDevice.setVol(customerDevice.getVol()); 
         }
-        dbCustomerDevice.setStatus(customerDevice.getStatus()==null?1:customerDevice.getStatus());
-        dbCustomerDevice.setCreatedBy(securityUtils.getCurrentDBUser().getId());
-        dbCustomerDevice.setDataloggerAlias(customerDevice.getDataloggerAlias());
-        dbCustomerDevice.setInverterAlias(customerDevice.getInverterAlias());
-        dbCustomerDevice.setDataloggerSn(customerDevice.getDataloggerSn());
-        dbCustomerDevice.setIdCustomer(customerDevice.getIdCustomer());
-        dbCustomerDevice.setInverterSn(customerDevice.getInverterSn());
-        dbCustomerDevice.setInverterType(customerDevice.getInverterType());
-        dbCustomerDevice.setLastUpdated(new Date());
-        dbCustomerDevice.setVol(customerDevice.getVol());
+
         customerDeviceRepository.save(dbCustomerDevice);
         v.setValid(Boolean.TRUE);
         return v;
@@ -78,7 +90,7 @@ public class CustomerDeviceController {
     @RequestMapping(value = "/project/deleteCustomerDevice",method = RequestMethod.POST)
     public Valid deleteCustomerDevice(@RequestParam Long deviceId){
         CustomerDevice customerDevice = customerDeviceRepository.findOne(deviceId);
-        customerDevice.setStatus(0l);
+        customerDevice.setDeleted(1l);
         customerDeviceRepository.save(customerDevice);
         Valid v=new Valid();
         v.setValid(Boolean.TRUE);
